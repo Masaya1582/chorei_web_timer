@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReNK朝礼タイマー</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 36px;
+            color: #333;
+        }
+
+        .timer-container {
+            text-align: center;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .timer {
+            font-size: 96px;
+            margin-bottom: 40px;
+        }
+
+       .button {
+       font-size: 24px;
+       width: 320px;
+       height: 68px;
+       border: none;
+       border-radius: 5px;
+       background: #007bff;
+       color: #fff;
+       cursor: pointer;
+       transition: background 0.3s;
+       }
+       .button:hover {
+       background: #0056b3;
+       }
+
+        img {
+            margin-top: 40px;
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ReNK朝礼タイマー</h1>
+    <div class="timer-container">
+        <div class="timer" id="timer">60</div>
+        <button class="button" id="controlButton">Start</button>
+    </div>
+    <img src="janko.jpg" alt="Humorous Image">
+    <audio id="alarmSound" src="bell.mp3"></audio>
+
+    <script>
+        let countdown;
+        let secondsRemaining = 60;
+        let isRunning = false;
+
+        const timerDisplay = document.getElementById('timer');
+        const controlButton = document.getElementById('controlButton');
+
+        function updateDisplay() {
+            timerDisplay.textContent = secondsRemaining;
+        }
+
+        function startTimer() {
+            countdown = setInterval(() => {
+                if (secondsRemaining > 0) {
+                    secondsRemaining--;
+                    updateDisplay();
+                } else {
+                    clearInterval(countdown);
+                    isRunning = false;
+                    controlButton.textContent = 'Start';
+                    secondsRemaining = 60;
+                    updateDisplay();
+                    alarmSound.play();
+                }
+            }, 1000);
+        }
+
+        controlButton.addEventListener('click', () => {
+            if (isRunning) {
+                // Reset timer
+                clearInterval(countdown);
+                secondsRemaining = 60;
+                updateDisplay();
+                isRunning = false;
+                controlButton.textContent = 'Start';
+            } else {
+                // Start or restart timer
+                if (secondsRemaining === 60) {
+                    startTimer();
+                    isRunning = true;
+                    controlButton.textContent = 'Reset';
+                } else {
+                    // Restart timer from current point
+                    clearInterval(countdown);
+                    secondsRemaining = 60;
+                    updateDisplay();
+                    startTimer();
+                    isRunning = true;
+                }
+            }
+        });
+
+        updateDisplay();
+    </script>
+</body>
+
+</html>
